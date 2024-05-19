@@ -203,6 +203,7 @@ export default {
         item = item
           .split(" ")
           .filter((word) => !this.unwantedWords?.includes(word))
+          .slice(0, 8)
           .join(" ");
 
         let ite = item
@@ -272,6 +273,10 @@ export default {
 
     doNothing(string) {
       console.log("doNothing called");
+
+      if (this.textarea === "") {
+        return null;
+      }
 
       this.outputMd = this.cleanMarkup(this.textarea);
       this.mdToDict(this.outputMd);
@@ -390,6 +395,7 @@ th {
 }
 table {
   width: 90vw;
+  max-width: 660px;
 }
 .edit-button {
   position: relative;

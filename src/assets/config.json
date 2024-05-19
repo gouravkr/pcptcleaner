@@ -1,5 +1,6 @@
 {
     "itemMap": {
+        "Category": "Item",
         "Motherboard": "Mobo",
         "Graphic Card": "GPU",
         "Power Supply": "PSU",

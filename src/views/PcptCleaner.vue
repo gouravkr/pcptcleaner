@@ -42,7 +42,6 @@
             :id="'edit-cell-' + index"
           />
           <span
-            type="text"
             @click="handleEdit(index)"
             v-if="key === 'Selection' && !editingCell.editing"
             class="edit-button"
@@ -51,7 +50,9 @@
         </td>
       </tr>
     </table>
-    <div>Made with <span v-html="mdProcessor(signatureLink)" /></div>
+    <div>
+      Mobile friendly table made with <span v-html="mdProcessor(signatureLink)" />
+    </div>
     <el-button type="primary" @click="copyTextNoInput">Copy</el-button>
     <div>{{ outputMd }}</div>
   </div>
@@ -173,32 +174,37 @@ export default {
       let rows = markup.split("\n");
       let cleanRows = rows.filter((i) => i);
 
-      let link = cleanRows[0];
-      let headers = cleanRows[1].split("|");
-      headers[0] = "Item";
-      let table = cleanRows.slice(3);
+      let startRow = 0;
+      let link = "";
+      for (var i = 0; i < 4; i++) {
+        if (cleanRows[i].includes("](")) {
+          this.pcptLink = cleanRows[i];
+          link = cleanRows[i];
+        }
+        if (!cleanRows[i].includes("|")) {
+          startRow += 1;
+        }
+      }
 
+      let headers = cleanRows[startRow].split("|");
+      headers[0] = "Item";
+
+      let table = cleanRows.slice(startRow + 2);
+      console.log(table);
       let configDict = table
         .map((row) => {
           let values = row.split("|");
           let obj = {};
           headers.forEach((header, index) => {
-            obj[header] = values[index];
+            obj[header] = values[index]?.trim();
           });
           return obj;
         })
         .filter((i) => i["Selection"].trim());
+      console.log(configDict);
 
-      let config = configDict.map((i) => {
-        let curDict = {};
-        for (let [k, v] of Object.entries(i)) {
-          curDict[k] = v.replaceAll("**", "").trim();
-        }
-        return curDict;
-      });
-
-      for (let i of config) {
-        let itemPair = i["Selection"].split("]");
+      for (let i of configDict) {
+        let itemPair = i["Selection"]?.split("]");
         let item = this.removeBrackets(itemPair[0].substring(1).toLowerCase());
         item = item
           .split(" ")
@@ -222,31 +228,31 @@ export default {
       }
 
       if (this.repeatRam) {
-        let ramList = config
+        let ramList = configDict
           .map((j, i) => [i, j])
           .filter(([i, j]) => j["Item"] === "RAM");
 
         let ramDict = { ...ramList[0][1] };
         ramDict["Item"] = "RAM2";
-        config.splice(ramList[0][0] + 1, 0, ramDict);
+        configDict.splice(ramList[0][0] + 1, 0, ramDict);
       }
 
-      let totalPrice = config.reduce((sum, i) => sum + parseInt(i["Price"]), 0);
+      let totalPrice = configDict.reduce((sum, i) => sum + parseInt(i["Price"]), 0);
       let totalPriceMarkup = `**Total**|${
         this.removeSource ? "" : "|"
       }|**${totalPrice}**`;
 
       if (this.removeSource) {
-        config.forEach((i) => delete i["Source"]);
+        configDict.forEach((i) => delete i["Source"]);
       }
 
       let prettyMarkup = [];
-      let keys = Object.keys(config[0]);
+      let keys = Object.keys(configDict[0]);
 
       prettyMarkup.push(keys.join("|"));
       let sep = "----|----|----" + (this.removeSource ? "" : "|----");
       prettyMarkup.push(sep);
-      for (let i of config) {
+      for (let i of configDict) {
         prettyMarkup.push(Object.values(i).join("|"));
       }
 

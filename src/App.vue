@@ -9,6 +9,7 @@ import { RouterLink, RouterView } from "vue-router";
         <nav>
           <RouterLink to="/">PCPT</RouterLink> |
           <RouterLink to="/Conversion">Conversion</RouterLink> |
+          <RouterLink to="/classify">Classify</RouterLink> |
           <RouterLink to="/about">About</RouterLink>
         </nav>
       </div>

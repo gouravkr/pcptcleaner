@@ -7,7 +7,7 @@ import { RouterLink, RouterView } from "vue-router";
     <header>
       <div class="wrapper">
         <nav>
-          <RouterLink to="/pcpt">PCPT</RouterLink> |
+          <RouterLink to="/">PCPT</RouterLink> |
           <RouterLink to="/Conversion">Conversion</RouterLink> |
           <RouterLink to="/about">About</RouterLink>
         </nav>

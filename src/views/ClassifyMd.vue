@@ -1,23 +1,43 @@
 <template>
   <div>
-    <el-input
-      class="m16"
-      type="textarea"
-      rows="5"
-      v-model="rowData"
-      @input="prepareTable"
-      placeholder="Paste markup copied from pcpricetracker"
-    />
-    <el-switch v-model="options.repeatRam" size="small" @change="prepareTable" /> Repeat
-    RAM
-    <el-switch v-model="options.removeSource" size="small" @change="prepareTable" />
-    Remove Source
-
-    <el-button class="m16" type="primary" @click="copyTextNoInput">Copy </el-button><br />
+    <el-row :gutter="10">
+      <el-col :xs="16" :sm="18" :md="18" :lg="18" :xl="21">
+        <el-input
+          class="m16"
+          style="width: 100%"
+          type="textarea"
+          rows="6"
+          v-model="rowData"
+          @input="prepareTable"
+          placeholder="Paste markup copied from pcpricetracker"
+        />
+      </el-col>
+      <el-col :xs="8" :sm="6" :md="6" :lg="6" :xl="3">
+        <div class="option-buttons">
+          <el-switch
+            v-model="options.repeatRam"
+            class="mt16"
+            @change="prepareTable"
+            active-text="Repeat RAM"
+          />
+          <br />
+          <el-switch
+            v-model="options.removeSource"
+            class="mt16"
+            @change="prepareTable"
+            active-text="Remove source"
+          />
+          <br />
+          <el-button id="copy-btn" class="mt16" type="primary" @click="copyTextNoInput"
+            >Copy </el-button
+          ><br />
+        </div>
+      </el-col>
+    </el-row>
 
     <div class="m16">
-      <h2>Cleaned table</h2>
-      <div v-html="mdProcessor(pcptLink)" />
+      <h2 v-if="outputDict.length > 0" style="margin-bottom: 12px">Cleaned table</h2>
+      <div v-html="mdProcessor(pcptLink)" style="margin-bottom: 6px" />
       <table class="mt-10">
         <thead>
           <tr>
@@ -58,6 +78,7 @@
 
 <script>
 import configData from "@/assets/config.json";
+import { ElMessage } from "element-plus";
 
 export default {
   data() {
@@ -299,6 +320,13 @@ export default {
 
     copyTextNoInput() {
       console.log("copy called");
+      if (this.outputDict.length === 0) {
+        ElMessage({
+          message: "Table is blank",
+          type: "warning",
+        });
+        return null;
+      }
       this.dictToMd(this.outputDict);
       const storage = document.createElement("textarea");
       storage.value = this.pcptLink + "\n\n";
@@ -309,34 +337,55 @@ export default {
       storage.setSelectionRange(0, 99999);
       document.execCommand("copy");
       document.body.removeChild(storage);
+      ElMessage({
+        message: "Copied successfully",
+        type: "success",
+      });
     },
   },
 };
 </script>
+
 <style>
 .m16 {
-  margin: 16px;
+  margin: 16px 0 0 16px;
+}
+.mt16 {
+  margin-top: 16px;
 }
 table,
 td,
 th {
-  border: 1px solid black;
+  border-bottom: 1.5px solid #61d7c3;
   border-collapse: collapse;
   padding: 4px;
 }
 th {
   font-weight: bold;
-  background-color: #ededed;
+  background-color: #61d7c3;
+  color: rgba(0, 0, 0, 0.7);
 }
 table {
-  width: 90vw;
+  width: 96vw;
   max-width: 660px;
 }
+
 .edit-button {
   position: relative;
   display: flex;
   float: right;
   color: rgb(14, 178, 223);
   cursor: pointer;
+}
+
+.option-buttons {
+  margin-left: 1rem;
+}
+.border {
+  border: 1px solid gray;
+  border-radius: 4px;
+}
+#copy-btn {
+  width: 95%;
 }
 </style>

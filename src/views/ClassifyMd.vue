@@ -107,7 +107,7 @@ export default {
         rowId: -1,
         link: "",
       },
-      signatureLink: "[PCPTCleaner](https://pcptcleaner.github.io)",
+      signatureLink: "[PCPT Cleaner](https://pcptcleaner.sillypot.in)",
     };
   },
 
@@ -183,8 +183,8 @@ export default {
       if (string.includes("](")) {
         var [string, link] = string.slice(1, -2).split("](");
       }
-      string = this.removeUnwantedWords(string);
       string = this.removeBrackets(string);
+      string = this.removeUnwantedWords(string);
 
       values[1] = link === null ? string : `[${string}](${link})`;
       return values.join("|");

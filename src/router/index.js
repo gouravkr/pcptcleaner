@@ -13,7 +13,7 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/',
+      path: '/pcpt',
       name: 'pcpt',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -29,8 +29,8 @@ const router = createRouter({
       component: () => import('../views/MdToDict.vue')
     },
     {
-      path: '/classify',
-      name: 'Classify',
+      path: '/',
+      name: 'Cleaner',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.

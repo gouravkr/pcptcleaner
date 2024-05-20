@@ -9,6 +9,7 @@
         "Memory_2": "RAM2",
         "Hard drive": "HDD",
         "SSD drive": "SSD",
+        "Monitor": "Disp",
         "Additional Monitor": "Monitor2",
         "CPU Cooler": "Cooler",
         "Keyboard": "KBD",
@@ -95,7 +96,8 @@
         "keyboard",
         "mouse",
         "headset",
-        "headphone"
+        "headphone",
+        "ready"
     ],
     "commonLongWordReplacements": {
         "Cooler Master": "CM",

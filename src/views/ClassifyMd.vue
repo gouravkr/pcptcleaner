@@ -70,8 +70,8 @@ export default {
       outputDict: [],
       outputMd: "",
       options: {
-        removeSource: false,
-        repeatRam: true,
+        removeSource: true,
+        repeatRam: false,
       },
       rowTypeMaster: {
         1: "link",
@@ -110,50 +110,49 @@ export default {
       var words = [];
 
       values.forEach((value) => {
-        if (!this.config.unwantedWords.includes(value.toLowerCase())) {
-          if (value.length < 13) {
-            words.push(value);
-          }
+        if (
+          !this.config.unwantedWords.includes(value.toLowerCase()) &&
+          value.length < 13
+        ) {
+          words.push(value);
         }
       });
 
       return words.slice(0, 8).join(" ");
     },
 
-    removeBrackets(string) {
-      let openBrackets = [];
-      let closeBrackets = [];
+    removeBrackets(text) {
+      let word = [];
+      let stack = 0;
 
-      for (let i = 0; i < string.length; i++) {
-        if (string[i] === "(") {
-          openBrackets.push(i);
-        } else if (string[i] === ")") {
-          closeBrackets.push(i);
+      for (let char of text) {
+        if (!stack && char !== "(") {
+          word.push(char);
         }
+        stack += { "(": 1, ")": -1 }[char] || 0;
       }
 
-      if (openBrackets.length !== closeBrackets.length) {
-        console.log("Failure");
-        return string; // Early return in case of mismatch
+      return word.join("");
+    },
+
+    cleanSource(source) {
+      if (typeof source === "undefined" || source === null || source === "") {
+        return null;
       }
-
-      openBrackets.reverse();
-      closeBrackets.reverse();
-
-      let bracketPairs = openBrackets.map((o, i) => [o, closeBrackets[i]]);
-
-      for (let [o, c] of bracketPairs) {
-        string = (string.slice(0, o).trim() + " " + string.slice(c + 1).trim()).trim();
+      source = source.trim();
+      let parts = source.split(" ");
+      if (parts[0].toLowerCase() == "the") {
+        parts.splice(0, 1);
       }
-
-      return string;
+      return parts[0];
     },
 
     cleanRow(string) {
       var values = string.split("|");
 
       var name = values[0].replaceAll("**", "").trim();
-      values[0] = this.config.itemMap[name];
+      values[0] = this.config.itemMap[name] || name;
+      values[2] = this.cleanSource(values[2]);
 
       string = values[1].trim();
       if (string === "") {
@@ -260,7 +259,6 @@ export default {
     },
 
     mdProcessor(string) {
-      console.log(typeof string);
       if (typeof string === "undefined" || string === "" || string === null) {
         return null;
       }

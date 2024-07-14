@@ -127,6 +127,11 @@ export default {
     },
 
     removeUnwantedWords(string) {
+      const CLWR = this.config.commonLongWordReplacements;
+      for (let key in CLWR) {
+        string = string.replace(key, CLWR[key]);
+      }
+
       var values = string.split(" ");
       var words = [];
 
@@ -234,7 +239,7 @@ export default {
         return total + (isNaN(itemPrice) ? 0 : itemPrice);
       }, 0);
       table.push({
-        Item: "",
+        Item: " ",
         Selection: "**Total**",
         Source: "",
         Price: "**" + totalPrice + "**",

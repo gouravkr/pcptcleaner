@@ -97,13 +97,19 @@
         "mouse",
         "headset",
         "headphone",
-        "ready"
+        "ready",
+        "non-modular",
+        "2280",
+        "AM4"
     ],
     "commonLongWordReplacements": {
         "Cooler Master": "CM",
         "Western Digital": "WD",
         "Corsair Vengeance": "Corsair",
         "HZ": "Hz",
-        "NVME": "NVMe"
+        "NVME": "NVMe",
+        "Ryzen 5 5000": "",
+        "Mid Tower": "mid-tower",
+        "Micro Tower": "micro-tower"
     }
 }

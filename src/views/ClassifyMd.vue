@@ -94,6 +94,7 @@ export default {
         removeSource: true,
         repeatRam: false,
       },
+      editedNames: [],
       rowTypeMaster: {
         1: "link",
         2: "separator",
@@ -190,6 +191,12 @@ export default {
       }
       string = this.removeBrackets(string);
       string = this.removeUnwantedWords(string);
+
+      this.editedNames.forEach((obj) => {
+        if (obj["oldName"] === string) {
+          string = obj["newName"];
+        }
+      });
 
       values[1] = link === null ? string : `[${string}](${link})`;
       return values.join("|");
@@ -306,7 +313,6 @@ export default {
     },
 
     handleEdit(row) {
-      // console.log(this.outputDict[row].Selection);
       var curVal = this.outputDict[row].Selection;
       this.editingCell.value = curVal.slice(1, curVal.indexOf("]"));
       this.editingCell.link = curVal.slice(curVal.indexOf("(") + 1, -2);
@@ -316,8 +322,13 @@ export default {
     },
 
     handleEditDone() {
+      let editDict = { oldName: this.editingCell };
       var row = this.editingCell.rowId;
       this.outputDict[row].Selection = `[${this.newCellValue}](${this.editingCell.link})`;
+      this.editedNames.push({
+        oldName: this.editingCell.value,
+        newName: this.newCellValue,
+      });
       this.newCellValue = "";
       this.editingCell.editing = false;
       this.dictToMd(this.outputDict);

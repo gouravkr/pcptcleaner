@@ -1,4 +1,4 @@
-import{_ as T,r as v,c,d as f,w as M,b as n,t as k,F as y,f as b,e as p,o as d}from"./index-CeJBUUbg.js";const D={data(){return{md:"",outputDict:[],outputMd:"",pcptLink:"",tableHeader:[]}},methods:{mdToDict(t){let e=t.split(`
+import{_ as T,r as v,c,d as f,w as M,b as n,t as k,F as y,f as b,e as p,o as d}from"./index-iIkvWton.js";const D={data(){return{md:"",outputDict:[],outputMd:"",pcptLink:"",tableHeader:[]}},methods:{mdToDict(t){let e=t.split(`
 `);for(var s=0,o=0;o<4;o++)e[o].includes("](")&&(this.pcptLink=e[o]),e[o].includes("|")||(console.log("includes"+e[o]),s+=1);let l=e[s].split("|");this.tableHeader=l;let u=e.slice(s+2).map(a=>{let m=a.split("|"),r={};return l.forEach((i,_)=>{var h;r[i]=(h=m[_])==null?void 0:h.trim()}),r});this.outputDict=u},dictToMd(t){let e=Object.keys(t[0]),s=e.join("|"),o="----|",l=o.repeat(e.length-1)+o.slice(0,-1);this.outputMd=s+`
 `,this.outputMd+=l+`
 `,console.log(t.slice(1)),t.forEach(u=>{this.outputMd+=Object.values(u).join("|")+`
